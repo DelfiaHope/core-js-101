@@ -62,8 +62,13 @@ function getPowerFunction(exponent) {
  *   getPolynom(8)     => y = 8
  *   getPolynom()      => null
  */
-function getPolynom(/* */) {
-  throw new Error('Not implemented');
+function getPolynom(...args) {
+  const arr = [...args];
+  const reverse = arr.reverse();
+  if (arr.length === 1) return () => reverse[0];
+  if (arr.length === 2) return (x) => reverse[0] + x * reverse[1];
+  if (arr.length === 3) return (x) => reverse[0] + x * reverse[1] + x ** 2 * reverse[2];
+  return null;
 }
 
 
@@ -81,8 +86,13 @@ function getPolynom(/* */) {
  *   ...
  *   memoizer() => the same random number  (next run, returns the previous cached result)
  */
-function memoize(/* func */) {
-  throw new Error('Not implemented');
+function memoize(func) {
+  let memoizer;
+  return () => {
+    if (memoizer) return memoizer;
+    memoizer = func();
+    return memoizer;
+  };
 }
 
 
@@ -129,8 +139,13 @@ function retry(/* func, attempts */) {
  * cos(3.141592653589793) ends
  *
  */
-function logger(/* func, logFunc */) {
-  throw new Error('Not implemented');
+function logger(func, logFunc) {
+  return (...args) => {
+    logFunc(`${func.name}(${JSON.stringify(args).slice(1, -1)}) starts`);
+    const result = func(...args);
+    logFunc(`${func.name}(${JSON.stringify(args).slice(1, -1)}) ends`);
+    return result;
+  };
 }
 
 
@@ -147,8 +162,8 @@ function logger(/* func, logFunc */) {
  *   partialUsingArguments(fn, 'a','b','c')('d') => 'abcd'
  *   partialUsingArguments(fn, 'a','b','c','d')() => 'abcd'
  */
-function partialUsingArguments(/* fn, ...args1 */) {
-  throw new Error('Not implemented');
+function partialUsingArguments(fn, ...args1) {
+  return (...args2) => fn(...args1, ...args2);
 }
 
 
@@ -169,8 +184,13 @@ function partialUsingArguments(/* fn, ...args1 */) {
  *   getId4() => 7
  *   getId10() => 11
  */
-function getIdGeneratorFunction(/* startFrom */) {
-  throw new Error('Not implemented');
+function getIdGeneratorFunction(startFrom) {
+  let index = 0;
+  return () => {
+    const result = startFrom + index;
+    index += 1;
+    return result;
+  };
 }
 
 
